@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { urls } from "../core/api-urls/urls";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -58,9 +58,7 @@ export const NotesPlayground: React.FC = () => {
     setNoteTitle(e.target.value)
   };
 
-  const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(updateContent(e.target.value));
-  };
+  const handleNoteChange = useCallback((e:React.ChangeEvent<HTMLDivElement>) => dispatch(updateContent(e.currentTarget.innerHTML)), [])
 
   const save = async () => {
     console.log(note.content);
@@ -96,7 +94,7 @@ export const NotesPlayground: React.FC = () => {
           </>
         )}
       </div>
-      <textarea value={note.content} onChange={handleNoteChange} style={{resize: 'none'}}></textarea>
+      <div contentEditable style={{border: '1px solid red'}} onBlur={handleNoteChange} dangerouslySetInnerHTML={{__html: note.content}}></div>
       <button onClick={save}>save</button>
     </>
   );
