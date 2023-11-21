@@ -25,9 +25,10 @@ export const NoteSlice = createSlice({
     updateTitle: (state, action: PayloadAction<string>) => {
       state.title = action.payload;
     },
+    clearNote: () => initialState,
   },
 });
 
-export const { setNote, updateContent, updateTitle } = NoteSlice.actions;
+export const { setNote, updateContent, updateTitle, clearNote } = NoteSlice.actions;
 
 export default NoteSlice.reducer;

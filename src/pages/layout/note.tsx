@@ -1,50 +1,25 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from 'react'
 import { NotesPlayground } from "../../components/note-playground";
-import { setNote } from "../../core/redux/reducers/note.slice";
-import { urls } from "../../core/api-urls/urls";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { Tabs } from "../../components/tabs";
+import { RootState } from "../../core/redux/store";
+import '../../styles/note.css'
+import {Note as NoteInterface} from '../../core/interfaces/note.interface'
 
-interface Props {
-  noteId: string;
-}
-
-export const Note: React.FC<Props> = ({ noteId }) => {
-  const [showNote, setShowNote] = useState<boolean>(false);
-
-  const dispatch = useDispatch()
+export const Note: React.FC = () => {
+  const note = useSelector((state: RootState) => state.note);
+  
+  const displayNote = useSelector((state: RootState) => state.display);
 
   useEffect(() => {
-    const getNote = async () => {
-      try {
-        const res = await fetch(`${urls.getNote}/${noteId}`);
-        const data = await res.json();
-        
-        console.log(res.status);
-
-        setShowNote(true)
-        dispatch(setNote(data));
-      } catch (e) {
-        setShowNote(false)
-        console.log(e);
-      }
-    };
-
-    getNote();
-
-  }, [noteId]);
-
+    console.log(displayNote)
+  }, [displayNote])
 
   return (
-    <>
-      {
-        showNote ? (
-          <NotesPlayground/>
-        ) : (
-          <>
-            select a note
-          </>
-        )
-      }
-    </>
+    <main className='note-side'>
+      <Tabs/>
+
+      <NotesPlayground/>
+    </main>
   );
 };
