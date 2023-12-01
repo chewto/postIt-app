@@ -1,15 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import notesReducer from './slices/notes.slice'
 import noteReducer from './slices/note.slice'
-import tabsReducer from './slices/tabs.slice'
 import displayReducer from './slices/display.slice'
+import cellsReducer from './slices/cells.slice'
 
 export const store = configureStore({
   reducer: {
     notes: notesReducer,
     note: noteReducer,
-    tabs: tabsReducer,
-    display: displayReducer
+    display: displayReducer,
+    cells: cellsReducer
   }
 })
 

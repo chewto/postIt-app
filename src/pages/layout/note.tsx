@@ -1,24 +1,34 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { NotesPlayground } from "../../components/note-playground";
-import { useSelector } from "react-redux";
-import { Tabs } from "../../components/tabs";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../core/redux/store";
 import '../../styles/note.css'
-import {Note as NoteInterface} from '../../core/interfaces/note.interface'
+import { urls } from '../../core/api-urls/urls';
+import { setCells } from '../../core/redux/slices/cells.slice';
 
 export const Note: React.FC = () => {
   const note = useSelector((state: RootState) => state.note);
-  
-  const displayNote = useSelector((state: RootState) => state.display);
 
-  useEffect(() => {
-    console.log(displayNote)
-  }, [displayNote])
+  const dispatch = useDispatch();
+
+  useEffect(()=> {
+    const getCells = async () => {
+      const res = await fetch(`${urls.getCells}/${note.id}`);
+      const data = await res.json();
+      dispatch(setCells(data))
+    }
+
+    getCells()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [note])
 
   return (
-    <main className='note-side'>
-      <Tabs/>
-
+    <main className='note-side'
+      // onContextMenu={(e) => {
+      //   e.preventDefault()
+      //   console.log('right clikc')
+      // }}
+    >
       <NotesPlayground/>
     </main>
   );

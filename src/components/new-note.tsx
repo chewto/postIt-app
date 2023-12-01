@@ -1,17 +1,17 @@
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addNote } from "../core/redux/slices/notes.slice";
 import { Note } from "../core/interfaces/note.interface";
 import { urls } from "../core/api-urls/urls";
+import {v4 as uuid4} from "uuid";
 
 export const NewNote: React.FC = () => {
-  
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [newNote, setNewNote] = useState<Note>({
+    id: "",
     title: "",
-    content: "",
-    userId: "271657c1-26d3-4251-b050-f05c1c5a7adc",
+    userId: "c7bc692b-64c0-4f2c-8baa-e5a609da9524",
   });
 
   const handleNewNote = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +46,12 @@ export const NewNote: React.FC = () => {
           autoComplete="off"
           onChange={handleNewNote}
           className="new-note-input"
+          onClick={() => {
+            setNewNote({
+              ...newNote,
+              id: uuid4()
+            })
+          }}
         />
         <button onClick={addNewNote}>new note</button>
       </div>

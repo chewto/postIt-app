@@ -12,10 +12,28 @@ export const NotesSlice = createSlice({
     },
     addNote: (state, action:PayloadAction <Note>) => {
       state.push(action.payload)
+    },
+    updateTitleList: (state, action:PayloadAction <Note>) => {
+      const {id} = action.payload
+
+      const index = state.findIndex((note) => note.id === id);
+
+      if(index !== -1) {
+        state[index] = action.payload
+      }
+    },
+    deleteNote: (state, action:PayloadAction<string>) => {
+      const id = action.payload
+
+      const noteIndex = state.findIndex((note) => note.id === id)
+
+      if(noteIndex !== -1) {
+        state.splice(noteIndex, 1)
+      }
     }
   }
 })
 
-export const {setNotes, addNote} = NotesSlice.actions
+export const {setNotes, addNote, updateTitleList, deleteNote} = NotesSlice.actions
 
 export default NotesSlice.reducer

@@ -1,4 +1,4 @@
-import { NotesList } from "../components/notes-list";
+import { NotesList } from "./layout/notes-list";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotes } from "../core/redux/slices/notes.slice";
@@ -15,7 +15,7 @@ export const Notes: React.FC = () => {
   useEffect(() => {
 
     const getNotes = async () =>{
-      const res = await fetch(`${urls.getUserNotes}/271657c1-26d3-4251-b050-f05c1c5a7adc`)
+      const res = await fetch(`${urls.getUserNotes}/c7bc692b-64c0-4f2c-8baa-e5a609da9524`)
       const data = await res.json()
 
       dispatch(setNotes(data))
@@ -23,7 +23,7 @@ export const Notes: React.FC = () => {
 
     getNotes()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notesList]);
+  }, []);
 
   return (
     <div className="notes">

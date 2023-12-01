@@ -6,5 +6,10 @@ export const urls = {
   addNewNote: `${baseURL}/add-note`,
   updateNote: `${baseURL}/update-note`,
   deleteNote: `${baseURL}/delete-note`,
+  getCells: `${baseURL}/get-cells`,
+  addCell: `${baseURL}/add-cell`,
+  updateCell: `${baseURL}/update-cell`,
+  deleteCell: `${baseURL}/delete-cell`,
+  deleteAllCells: `${baseURL}/delete-all-cells`,
   createUser: `${baseURL}/create-user`
 }

@@ -1,6 +1,14 @@
 export interface Note{
-  id?: string;
+  id: string;
   title: string;
-  content: string;
   userId: string;
+}
+
+export interface Cell{
+  id: string;
+  content: string;
+  type: string;
+  orderNumber: number;
+  tag: string;
+  noteId: string;
 }

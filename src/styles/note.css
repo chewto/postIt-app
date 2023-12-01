@@ -32,3 +32,16 @@
   padding: 0 20px;
   font-size: 35px;
 }
+
+.note-playground{
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.text-cell > * {
+  font-size: 24px;
+}
+
+.cell-img{
+  max-width: 500px;
+}
