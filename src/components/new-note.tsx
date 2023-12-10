@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { addNote } from "../core/redux/slices/notes.slice";
 import { Note } from "../core/interfaces/note.interface";
 import { urls } from "../core/api-urls/urls";
@@ -11,7 +11,9 @@ export const NewNote: React.FC = () => {
   const [newNote, setNewNote] = useState<Note>({
     id: "",
     title: "",
-    userId: "c7bc692b-64c0-4f2c-8baa-e5a609da9524",
+    width: 1250,
+    height: 1250,
+    userId: "a0139992-f6d3-44de-b8b3-01b5b86c9304",
   });
 
   const handleNewNote = (e: React.ChangeEvent<HTMLInputElement>) => {

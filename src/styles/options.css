@@ -40,17 +40,3 @@
   margin: 15px 0;
   gap: 5px;
 }
-
-.reposition-cell-container{
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid red;
-  margin:7px 0;
-}
-
-
-.reposition-cell-container > div{
-  width: 100%;
-}

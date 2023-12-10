@@ -1,7 +1,32 @@
 .notelist-aside{
   height: 100vh;
   padding: 15px 10px 0 10px ;
+  display: none;
+  position: absolute;
+  left: -295px;
   overflow-y: scroll;
+}
+
+.notelist-aside-active{
+  height: 100vh;
+  background: #fff;
+  width: 300px;
+  padding: 15px 10px 0 10px ;
+  position: absolute;
+  left: 0px;
+  overflow-y: scroll;
+}
+
+.aside-button{
+  position: absolute;
+  top: 25px;
+  left: 20px;
+}
+
+.aside-button-active{
+  position: absolute;
+  top: 25px;
+  left: 310px;
 }
 
 ::-webkit-scrollbar{

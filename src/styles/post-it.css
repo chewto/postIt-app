@@ -1,0 +1,11 @@
+.postit-container {
+  position: absolute;
+}
+
+.text-postit > * {
+  font-size: 24px;
+}
+
+.postit-img{
+  max-width: 500px;
+}

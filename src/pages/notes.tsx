@@ -15,7 +15,7 @@ export const Notes: React.FC = () => {
   useEffect(() => {
 
     const getNotes = async () =>{
-      const res = await fetch(`${urls.getUserNotes}/c7bc692b-64c0-4f2c-8baa-e5a609da9524`)
+      const res = await fetch(`${urls.getUserNotes}/a0139992-f6d3-44de-b8b3-01b5b86c9304`)
       const data = await res.json()
 
       dispatch(setNotes(data))

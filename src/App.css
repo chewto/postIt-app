@@ -1,5 +1,2 @@
 .notes{
-  display: grid;
-  grid-template-columns: 25% 1fr 1fr;
-  width: 100%;
 }

@@ -1,26 +1,26 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { Cell } from "../../core/interfaces/note.interface";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { PostIt } from "../../core/interfaces/note.interface";
 import { useDispatch } from "react-redux";
-import { addCell, updateCellEdit } from "../../core/redux/slices/cells.slice";
+import { addPostIt, updatePostItEdit } from "../../core/redux/slices/post-it.slice";
 import { urls } from "../../core/api-urls/urls";
 import "../../styles/options.css";
 
 interface Props {
-  cellData: Cell;
-  setCellData: Dispatch<SetStateAction<Cell>>;
+  postItData: PostIt;
+  setPostItData: Dispatch<SetStateAction<PostIt>>;
   setDisplayOption: Dispatch<SetStateAction<boolean>>;
   use: string;
 }
 
 export const Options: React.FC<Props> = ({
-  cellData,
-  setCellData,
+  postItData,
+  setPostItData,
   setDisplayOption,
   use
 }) => {
   const [imageOption, setImageOption] = useState<string>("link");
 
-  const [textOption, setTextOption] = useState<string>("p");
+  const [option, setOption] = useState<string>("")
 
   const dispatch = useDispatch();
 
@@ -62,30 +62,32 @@ export const Options: React.FC<Props> = ({
     },
   ];
 
-  const handleCellType = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const cellType = e.currentTarget.name;
 
-    setCellData({
-      ...cellData,
-      type: cellType,
-    });
+  const handleCellType = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const postItType = e.currentTarget.name;
+
+    setPostItData({
+      ...postItData,
+      type: postItType
+    })
+
+    setOption(postItType)
   };
 
   const handleTextOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     const tag = e.currentTarget.name;
 
-    setCellData({
-      ...cellData,
-      tag: tag,
-    });
-    setTextOption(tag);
+    setPostItData({
+      ...postItData,
+      tag: tag
+    })
   };
 
   const handleImage = (e: React.MouseEvent<HTMLButtonElement>) => {
     setImageOption(e.currentTarget.name);
 
-    setCellData({
-      ...cellData,
+    setPostItData({
+      ...postItData,
       tag: "img",
     });
   };
@@ -93,8 +95,8 @@ export const Options: React.FC<Props> = ({
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
 
     if (imageOption === "link") {
-      setCellData({
-        ...cellData,
+      setPostItData({
+        ...postItData,
         content: e.currentTarget.value,
       });
     }
@@ -110,8 +112,8 @@ export const Options: React.FC<Props> = ({
         const dataUrl = reader.result;
 
         if (typeof dataUrl === "string") {
-          setCellData({
-            ...cellData,
+          setPostItData({
+            ...postItData,
             content: dataUrl,
           });
         }
@@ -121,11 +123,11 @@ export const Options: React.FC<Props> = ({
 
   const addNewCell = async () => {
     setDisplayOption((prev) => !prev);
-    dispatch(addCell(cellData));
+    dispatch(addPostIt(postItData));
 
-    const res = await fetch(`${urls.addCell}`, {
+    const res = await fetch(`${urls.addPostIt}`, {
       method: "POST",
-      body: JSON.stringify(cellData),
+      body: JSON.stringify(postItData),
       headers: {
         "Content-type": "application/json",
       },
@@ -138,11 +140,11 @@ export const Options: React.FC<Props> = ({
 
   const editCecll = async () => {
     setDisplayOption((prev) => !prev)
-    dispatch(updateCellEdit(cellData))
+    dispatch(updatePostItEdit(postItData))
 
-    const res = await fetch(`${urls.updateCell}`, {
+    const res = await fetch(`${urls.updatePostIt}`, {
       method: 'PUT',
-      body: JSON.stringify(cellData),
+      body: JSON.stringify(postItData),
       headers: {
         "Content-type": "application/json"
       }
@@ -172,7 +174,7 @@ export const Options: React.FC<Props> = ({
         </button>
       </div>
 
-      {cellData.type === "image" && (
+      {option === "image" && (
         <div className="image-section">
           <div className="image-options">
             <button onClick={handleImage} name="upload">
@@ -201,7 +203,7 @@ export const Options: React.FC<Props> = ({
         </div>
       )}
 
-      {cellData.type === "text" && (
+      {option === "text" && (
         <div className="text-options">
           {textOptions.map((option) => (
             <button

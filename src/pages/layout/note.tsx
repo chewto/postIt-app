@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
-import { NotesPlayground } from "../../components/note-playground";
+import { Board } from "../../components/board";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../core/redux/store";
 import '../../styles/note.css'
 import { urls } from '../../core/api-urls/urls';
-import { setCells } from '../../core/redux/slices/cells.slice';
+import { setPostIts } from '../../core/redux/slices/post-it.slice';
 
 export const Note: React.FC = () => {
   const note = useSelector((state: RootState) => state.note);
@@ -12,13 +12,13 @@ export const Note: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(()=> {
-    const getCells = async () => {
-      const res = await fetch(`${urls.getCells}/${note.id}`);
+    const getPostIts = async () => {
+      const res = await fetch(`${urls.getPostIts}/${note.id}`);
       const data = await res.json();
-      dispatch(setCells(data))
+      dispatch(setPostIts(data))
     }
 
-    getCells()
+    getPostIts()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [note])
 
@@ -29,7 +29,7 @@ export const Note: React.FC = () => {
       //   console.log('right clikc')
       // }}
     >
-      <NotesPlayground/>
+      <Board/>
     </main>
   );
 };

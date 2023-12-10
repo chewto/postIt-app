@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { urls } from "../core/api-urls/urls";
 import { useDispatch, useSelector } from "react-redux";
-import { updateTitle } from "../core/redux/slices/note.slice";
+import { updateSize, updateTitle } from "../core/redux/slices/note.slice";
 import { RootState } from "../core/redux/store";
 import {
-  Cell as CellType,
+  PostIt as PostItType,
   Note as NoteType,
 } from "../core/interfaces/note.interface";
 import { Options } from "./shared/options";
 import { updateTitleList } from "../core/redux/slices/notes.slice";
-import { Cell } from "./shared/cell";
+import { PostIt } from "./shared/post-it";
 import { v4 as uuid4 } from "uuid";
 
-export const NotesPlayground: React.FC = () => {
+export const Board: React.FC = () => {
   const note = useSelector((state: RootState) => state.note);
 
-  const cells = useSelector((state: RootState) => state.cells);
+  const postIts = useSelector((state: RootState) => state.postIt);
 
   const dispatch = useDispatch();
 
@@ -25,54 +25,49 @@ export const NotesPlayground: React.FC = () => {
 
   const [displayOption, setDisplayOption] = useState<boolean>(false);
 
-  const [cellData, setCellData] = useState<CellType>({
+  const [postItData, setPostItData] = useState<PostItType>({
     id: "",
     content: "",
-    type: "",
-    orderNumber: 0,
+    type: "text",
     tag: "",
+    x_position: 0,
+    y_position: 0,
+    width:400,
+    height:100,
     noteId: "",
   });
 
   const [newNoteTitle, setNoteTitle] = useState<string>("");
-
-  const [draggingCell, setDraggingCell] = useState<CellType>({
-    id: '',
-    content: '',
-    orderNumber: 0,
-    type: '',
-    tag: '',
-    noteId: ''
+  const [noteSize, setNoteSize] = useState({
+    width: 0,
+    height: 0
   })
 
   useEffect(() => {
-    setCellData({
-      ...cellData,
+    setPostItData({
+      ...postItData,
       noteId: note.id,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [note]);
 
-  useEffect(() => {
-    setCellData({
-      ...cellData,
-      orderNumber: cells.length,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cells]);
-
   useEffect(()=> {
-    console.log(cells)
-  }, [cells])
+    console.log(postIts)
+  }, [postIts])
 
   const handleEditClick = () => {
     setEdit((prev) => !prev);
     setOldTitle(note.title);
+    setNoteSize({
+      width: note.width,
+      height: note.height
+    })
   };
 
   const handleCancel = () => {
     setEdit((prev) => !prev);
     dispatch(updateTitle(oldTitle));
+    dispatch(updateSize({width: noteSize.width, height: noteSize.height}))
   };
 
   const handleFinish = async () => {
@@ -82,6 +77,8 @@ export const NotesPlayground: React.FC = () => {
       id: note.id,
       title: newNoteTitle,
       userId: note.userId,
+      width: note.width,
+      height: note.height
     };
 
     dispatch(updateTitle(newNoteTitle));
@@ -103,21 +100,27 @@ export const NotesPlayground: React.FC = () => {
     setNoteTitle(e.target.value);
   };
 
+  const handleEditSize = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.currentTarget.value)
+
+    setNoteSize({
+      ...noteSize,
+      [e.target.name]: value
+    })
+  }
+
   const save = () => {
     
-    cells.forEach((cell) => {
-
-      if(cell.content.length >= 1){
-        fetch(`${urls.updateCell}`, {
+    postIts.forEach((postIt:PostItType) => {
+        fetch(`${urls.updatePostIt}`, {
           method: 'PUT',
-          body: JSON.stringify(cell),
+          body: JSON.stringify(postIt),
           headers: {
             "Content-type": "application/json",
           }
         })
         .then(res => res.json())
         .then(data => console.log(data))
-      }
     })
   };
 
@@ -126,6 +129,8 @@ export const NotesPlayground: React.FC = () => {
       <div className="note-title-container">
         {edit ? (
           <>
+            <input type="number" onChange={handleEditSize} defaultValue={note.width} name="width"/>
+            <input type="number" onChange={handleEditSize} defaultValue={note.height} name="height"/>
             <input
               type="text"
               onChange={handleEditChange}
@@ -151,8 +156,8 @@ export const NotesPlayground: React.FC = () => {
       <div>
         <button onClick={() => {
           setDisplayOption((prev) => !prev);
-          setCellData({
-            ...cellData,
+          setPostItData({
+            ...postItData,
             id: uuid4()
           })
         }}>
@@ -162,16 +167,16 @@ export const NotesPlayground: React.FC = () => {
         <button onClick={save}>save</button>
         {displayOption && (
           <Options
-            cellData={cellData}
-            setCellData={setCellData}
+            postItData={postItData}
+            setPostItData={setPostItData}
             setDisplayOption={setDisplayOption}
             use="add"
           />
         )}
       </div>
-      <div className="note-playground">
-        {cells.map((cell: CellType) => (
-          <Cell cell={cell} key={cell.id} draggingCell={draggingCell} setDraggingCell={setDraggingCell}/>
+      <div className="board" style={{width: `${note.width}px`, height: `${note.height}px`}}>
+        {postIts.map((postIt: PostItType) => (
+          <PostIt postIt={postIt} key={postIt.id}/>
         ))}
       </div>
     </>
